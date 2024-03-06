@@ -1,68 +1,70 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+* {
   margin: 0;
-  display: flex;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --depth: 1000px;
+}
+
+#root {
+  display: grid;
   place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  background-image: radial-gradient(#333, #0a0a0a);
+  overflow: hidden;
+  perspective: var(--depth);
+  perspective-origin: 50% 30%;
+  border: 1px solid blue;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#root * {
+  transform-style: preserve-3d;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+#root #scene * {
+  position: absolute;
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+#root #scene {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.ground-floor {
+  box-shadow: 1em -1em 5em #000 inset;
+  background-image: radial-gradient(circle, transparent, #000 40em),
+    repeating-conic-gradient(
+      #686868 0 15deg,
+      #707070 0 30deg,
+      #808080 0 60deg,
+      #909090 0 75deg,
+      #a0a0a0 0 90deg
+    );
+  background-size: 100% 100%, 4em 4em;
 }
+
+#lion,
+#lion * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* @keyframes animate-lion {
+  0%,
+  100% {
+    transform: translate3d(27vmin, -4vmin, 0vmin);
+  }
+  33% {
+    transform: translate3d(27vmin, -8vmin, 0vmin) rotateZ(10deg) rotateX(-5deg);
+  }
+  66% {
+    transform: translate3d(27vmin, -7vmin, 0vmin) rotateZ(-10deg) rotateX(5deg);
+  }
+} */
