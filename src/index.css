@@ -56,15 +56,36 @@
   align-items: center;
 }
 
-/* @keyframes animate-lion {
+@keyframes animate-lion {
   0%,
   100% {
-    transform: translate3d(27vmin, -4vmin, 0vmin);
+    transform: translate3d(0, -4vmin, 0vmin);
   }
   33% {
-    transform: translate3d(27vmin, -8vmin, 0vmin) rotateZ(10deg) rotateX(-5deg);
+    transform: translate3d(0, -8vmin, 0vmin) rotateZ(10deg) rotateX(-5deg);
   }
   66% {
-    transform: translate3d(27vmin, -7vmin, 0vmin) rotateZ(-10deg) rotateX(5deg);
+    transform: translate3d(0, -7vmin, 0vmin) rotateZ(-10deg) rotateX(5deg);
   }
-} */
+}
+
+@keyframes rot-left-leg-back {
+  to {
+    transform: rotateX(-90deg);
+  }
+}
+@keyframes rot-right-leg-back {
+  to {
+    transform: translate3d(11vmin, 0vmin, -7.5vmin) rotateZ(-90deg);
+  }
+}
+@keyframes rot-left-leg-front {
+  to {
+    transform: translate3d(0vmin, 0vmin, 7.5vmin) rotateZ(90deg);
+  }
+}
+@keyframes rot-right-leg-front {
+  to {
+    transform: translate3d(0vmin, 0vmin, -7.5vmin) rotateZ(90deg);
+  }
+}

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import Ground from './components/Ground';
-import Cube from './components/Cube';
+import Lion from './components/Lion';
 
 function App() {
   const [xAngle, setXAngle] = useState(70);
   const [yAngle, setYAngle] = useState(0);
-  const [zAngle, setZAngle] = useState(0);
+  const [zAngle, setZAngle] = useState(52);
 
   useEffect(() => {
     const ground = document.getElementById('scene');
@@ -59,50 +59,7 @@ function App() {
         className='relative border border-green-500 w-full h-full'
       >
         <Ground />
-        <div id='lion'>
-          <div className='body face'>
-            <Cube
-              height='5rem'
-              width='5.5rem'
-              length='8rem'
-              borderColor='#123'
-              backStyle={{
-                backgroundImage: `
-                linear-gradient(
-                  to bottom,
-                  #0000 1rem,
-                  #783d2a 1rem,
-                  #0000 5rem
-                ),
-                linear-gradient(
-                  to top,
-                  #c8834f 3.5rem, 
-                  transparent 3.5rem 5rem
-                ),
-                linear-gradient(
-                  to right,
-                  transparent 1rem,
-                  #e4ddb7 1rem 4.5rem,
-                  transparent 4.5rem 5rem
-                )`,
-              }}
-            />
-          </div>
-          <div className='mane face'>
-            <Cube
-              borderColor='#783d2a'
-              bgColor='#783d2a'
-              width='6rem'
-              height='4.5rem'
-              length='6rem'
-              style={{
-                transform: `translateY(1rem) translateZ(0.75rem)`,
-              }}
-              opacity={0.8}
-            />
-            {/* <Cube borderColor='#fff' /> */}
-          </div>
-        </div>
+        <Lion height={120} width={90} length={128} />
       </div>
     </>
   );

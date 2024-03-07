@@ -21,9 +21,9 @@ interface ICube {
 const Cube: FC<ICube> = ({
   className,
   id,
-  height = '8rem',
-  width = '13rem',
-  length = '18rem',
+  height = '128px',
+  width = '208px',
+  length = '288px',
   bgColor = '#c8834f',
   borderColor = '#c8834f',
   backStyle = {},
@@ -50,28 +50,28 @@ const Cube: FC<ICube> = ({
         <div
           className='left-0 border'
           style={{
+            ...leftStyle,
             width: height,
             height: length,
             transformOrigin: 'left top',
-            transform: `rotateY(-90deg)`,
+            transform: `rotateY(-90deg) ${leftStyle.transform ?? ''}`,
             backgroundColor: bgColor,
             borderColor: borderColor,
             opacity: opacity,
-            ...leftStyle,
           }}
         ></div>
         {/* right wall */}
         <div
           className='right-0 border'
           style={{
+            ...rightStyle,
             width: height,
             height: length,
             transformOrigin: 'right top',
-            transform: `rotateY(90deg)`,
+            transform: `rotateY(90deg) ${rightStyle.transform ?? ''}`,
             backgroundColor: bgColor,
             borderColor: borderColor,
             opacity: opacity,
-            ...rightStyle,
           }}
         ></div>
         {/* top wall */}
@@ -80,11 +80,11 @@ const Cube: FC<ICube> = ({
           style={{
             width: width,
             height: length,
-            transform: `translateZ(${height})`,
+            ...topStyle,
+            transform: `translateZ(${height}) ${topStyle.transform ?? ''}`,
             backgroundColor: bgColor,
             borderColor: borderColor,
             opacity: opacity,
-            ...topStyle,
           }}
         ></div>
         {/* bottom wall */}
@@ -103,28 +103,30 @@ const Cube: FC<ICube> = ({
         <div
           className='bottom-0 border'
           style={{
+            backgroundColor: bgColor,
+            borderColor: borderColor,
+            ...frontStyle,
             width: width,
             height: height,
             transformOrigin: 'left bottom',
-            transform: `rotateX(-90deg)`,
-            backgroundColor: bgColor,
-            borderColor: borderColor,
+            transform: `rotateX(-90deg) ${frontStyle.transform ?? ''}`,
             opacity: opacity,
-            ...frontStyle,
           }}
         ></div>
         {/* back wall */}
         <div
           className='top-0 border'
           style={{
+            ...backStyle,
             width: width,
             height: height,
-            transformOrigin: 'left top',
-            transform: `rotateX(90deg)`,
+            transformOrigin: 'right top',
+            transform: `rotateX(90deg) rotateZ(180deg) translateY(-${height}) translateX(${width}) ${
+              backStyle.transform ?? ''
+            }`,
             backgroundColor: bgColor,
             borderColor: borderColor,
             opacity: opacity,
-            ...backStyle,
           }}
         ></div>
       </div>
