@@ -5,7 +5,7 @@ import Lion from './components/Lion';
 function App() {
   const [xAngle, setXAngle] = useState(60);
   const [yAngle, setYAngle] = useState(0);
-  const [zAngle, setZAngle] = useState(50);
+  const [zAngle, setZAngle] = useState(30);
   const [steps, setSteps] = useState(0);
 
   useEffect(() => {
@@ -18,9 +18,28 @@ function App() {
   }, [xAngle, yAngle, zAngle]);
 
   useEffect(() => {
+    const rootEl: any = document.querySelector(':root');
+    const rr = getComputedStyle(rootEl);
+
+    const angleStep = 10;
+
     function handler(e: KeyboardEvent) {
+      const lionAngleZ = +(
+        rr.getPropertyValue('--lionAngleZ').match(/\d/g)?.join('') || 0
+      );
+
       if (e.key === 'ArrowUp') {
         setSteps((p) => p + 10);
+      } else if (e.key === 'ArrowLeft') {
+        rootEl.style.setProperty(
+          '--lionAngleZ',
+          `${(lionAngleZ - angleStep + 360) % 360}deg`
+        );
+      } else if (e.key === 'ArrowRight') {
+        rootEl.style.setProperty(
+          '--lionAngleZ',
+          `${(lionAngleZ + angleStep + 360) % 360}deg`
+        );
       }
     }
     window.addEventListener('keydown', handler);
@@ -73,7 +92,13 @@ function App() {
         className='relative border border-green-500 w-full h-full'
       >
         <Ground />
-        <Lion height={120} width={90} length={128} steps={steps} />
+        <Lion
+          height={120}
+          width={90}
+          length={128}
+          steps={steps}
+          setSteps={setSteps}
+        />
       </div>
     </>
   );

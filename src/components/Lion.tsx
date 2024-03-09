@@ -6,10 +6,20 @@ interface ILion {
   width: number;
   height: number;
   length: number;
-  steps?: number;
+  steps: number;
+  setSteps: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Lion: FC<ILion> = ({ height, length, width, steps }) => {
+const sin = (degree: number) => {
+  return Math.sin(Math.PI * (degree / 180));
+};
+const cos = (degree: number) => {
+  return Math.cos(Math.PI * (degree / 180));
+};
+
+const numRegex = /-?\d+/g;
+
+const Lion: FC<ILion> = ({ height, length, width, steps, setSteps }) => {
   const lionRef = useRef<HTMLDivElement>(null);
 
   const maneWidth = width + 10;
@@ -34,27 +44,28 @@ const Lion: FC<ILion> = ({ height, length, width, steps }) => {
   const legLength = width * 0.25;
 
   useEffect(() => {
-    const rr: any = document.querySelector(':root');
-    const lionPos = getComputedStyle(rr!)
-      .getPropertyValue('--lionPosY')
-      .match(/\d/g)
-      ?.join('');
-    const diff = (steps ?? 0) - +(lionPos ?? 0);
-    if (
-      lionRef.current &&
-      !lionRef.current.classList.contains('lion-animate-class') &&
-      diff > 0
-    ) {
-      const leftFrontLeg = document.getElementById('left-front-leg');
-      const rightFrontLeg = document.getElementById('right-front-leg');
-      const leftBackLeg = document.getElementById('left-back-leg');
-      const rightBackLeg = document.getElementById('right-back-leg');
-      rr.style.setProperty('--lionStepSize', `${diff}px`);
-      lionRef.current.classList.add('lion-animate-class');
-      leftFrontLeg?.classList.add('left-front-leg');
-      rightFrontLeg?.classList.add('right-front-leg');
-      leftBackLeg?.classList.add('left-back-leg');
-      rightBackLeg?.classList.add('right-back-leg');
+    if (steps > 0) {
+      const rootEl: any = document.querySelector(':root')!;
+      if (
+        lionRef.current &&
+        !lionRef.current.classList.contains('lion-animate-class')
+      ) {
+        const leftFrontLeg = document.getElementById('left-front-leg');
+        const rightFrontLeg = document.getElementById('right-front-leg');
+        const leftBackLeg = document.getElementById('left-back-leg');
+        const rightBackLeg = document.getElementById('right-back-leg');
+        const groundFloor = document.getElementById('ground-floor');
+
+        rootEl.style.setProperty('--lionStepSize', `${steps}px`);
+
+        lionRef.current.classList.add('lion-animate-class');
+        leftFrontLeg?.classList.add('left-front-leg');
+        rightFrontLeg?.classList.add('right-front-leg');
+        leftBackLeg?.classList.add('left-back-leg');
+        rightBackLeg?.classList.add('right-back-leg');
+        groundFloor?.classList.add('ground-animate-class');
+        setSteps(0);
+      }
     }
   }, [steps, lionRef]);
 
@@ -64,30 +75,46 @@ const Lion: FC<ILion> = ({ height, length, width, steps }) => {
       ref={lionRef}
       onAnimationEnd={() => {
         lionRef.current!.classList.remove('lion-animate-class');
-        const rr: any = document.querySelector(':root');
-        const lionPos = getComputedStyle(rr!)
-          .getPropertyValue('--lionPosY')
-          .match(/\d/g)
-          ?.join('');
-        const lionStepSize = getComputedStyle(rr!)
-          .getPropertyValue('--lionStepSize')
-          .match(/\d/g)
-          ?.join('');
+        const rootEl: any = document.querySelector(':root');
+        const rr = getComputedStyle(rootEl);
+        const lionPosY = +(
+          rr.getPropertyValue('--lionPosY').match(numRegex)?.join('') || 0
+        );
+        const lionPosX = +(
+          rr.getPropertyValue('--lionPosX').match(numRegex)?.join('') || 0
+        );
+        const lionStepSize = +(
+          rr.getPropertyValue('--lionStepSize').match(/\d/g)?.join('') || 0
+        );
+        const lionAngleZ = +(
+          rr.getPropertyValue('--lionAngleZ').match(/\d/g)?.join('') || 0
+        );
 
-        const newPos = +(lionPos ?? 0) + +(lionStepSize ?? 0);
+        console.log('lionPosX:', lionPosX, 'lionPosY:', lionPosY);
+        console.log('lionAngleZ', lionAngleZ);
+
+        const newPosY = Math.round(lionPosY + lionStepSize * cos(lionAngleZ));
+        const newPosX = Math.round(lionPosX + lionStepSize * sin(lionAngleZ));
+
+        console.log('newPosX:', newPosX, 'newPosY:', newPosY);
+        console.log('-------------');
 
         const leftFrontLeg = document.getElementById('left-front-leg');
         const rightFrontLeg = document.getElementById('right-front-leg');
         const leftBackLeg = document.getElementById('left-back-leg');
         const rightBackLeg = document.getElementById('right-back-leg');
+        const groundFloor = document.getElementById('ground-floor');
 
-        rr.style.setProperty('--lionPosY', `${newPos}px`);
-        rr.style.setProperty('--lionStepSize', `0px`);
+        rootEl.style.setProperty('--lionPosY', `${newPosY}px`);
+        rootEl.style.setProperty('--lionPosX', `${newPosX}px`);
+        rootEl.style.setProperty('--lionStepSize', `0px`);
 
         leftFrontLeg?.classList.remove('left-front-leg');
         rightFrontLeg?.classList.remove('right-front-leg');
         leftBackLeg?.classList.remove('left-back-leg');
         rightBackLeg?.classList.remove('right-back-leg');
+
+        groundFloor?.classList.remove('ground-animate-class');
       }}
     >
       <div

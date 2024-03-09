@@ -9,10 +9,15 @@
 }
 
 :root {
-  --depth: 1000px;
+  --depth: 2000px;
 
   --lionPosY: 0px;
+  --lionPosX: 0px;
   --lionStepSize: 10px;
+
+  --lionAngleZ: 0deg;
+
+  --lionJumpTime: 0.6s;
 }
 
 #root {
@@ -41,7 +46,7 @@
 
 .ground-floor {
   box-shadow: 1em -1em 5em #000 inset;
-  background-image: radial-gradient(circle, transparent, #000 40em),
+  background-image: radial-gradient(circle, transparent, #000 100em),
     repeating-conic-gradient(
       #686868 0 15deg,
       #707070 0 30deg,
@@ -61,45 +66,67 @@
 }
 
 .lion-animate-class {
-  animation: animate-lion 0.6s ease-in-out;
+  animation: animate-lion var(--lionJumpTime) ease-in-out;
   animation-fill-mode: both;
 }
 
 #lion {
-  transform: translateY(var(--lionPosY)) translateZ(0px) rotateX(0deg);
+  transform: rotateZ(var(--lionAngleZ));
 }
 
 @keyframes animate-lion {
   0% {
-    transform: translateY(var(--lionPosY)) translateZ(0px) rotateX(0deg);
+    transform: rotateZ(var(--lionAngleZ)) translateZ(0px) rotateX(0deg);
   }
   33% {
-    transform: translateY(calc(var(--lionPosY) + (var(--lionStepSize) / 3)))
-      translateZ(10px) rotateX(10deg);
+    transform: rotateZ(var(--lionAngleZ)) translateZ(10px) rotateX(10deg);
   }
   66% {
-    transform: translateY(
-        calc(var(--lionPosY) + ((var(--lionStepSize) * 2) / 3))
-      )
-      translateZ(7px) rotateX(-10deg);
+    transform: rotateZ(var(--lionAngleZ)) translateZ(7px) rotateX(-10deg);
   }
   100% {
-    transform: translateY(calc(var(--lionPosY) + var(--lionStepSize)))
-      translateZ(0px) rotateX(0deg);
+    transform: rotateZ(var(--lionAngleZ)) translateZ(0px) rotateX(0deg);
+  }
+}
+
+#ground-floor {
+  transform: translateY(calc(var(--lionPosY) * -1))
+    translateX(calc(var(--lionPosX)));
+}
+
+.ground-animate-class {
+  animation: animate-floor var(--lionJumpTime) ease-in-out infinite;
+  animation-fill-mode: forwards;
+}
+
+@keyframes animate-floor {
+  0% {
+    transform: translate(var(--lionPosX), calc(var(--lionPosY) * -1));
+  }
+  100% {
+    transform: translate(
+      calc(
+        var(--lionPosX) + calc(var(--lionStepSize) * sin(var(--lionAngleZ)))
+      ),
+      calc(
+        (var(--lionPosY) + calc(var(--lionStepSize) * cos(var(--lionAngleZ)))) *
+          -1
+      )
+    );
   }
 }
 
 .left-front-leg {
-  animation: rot-left-leg-front 0.6s ease-in-out 0.075s;
+  animation: rot-left-leg-front var(--lionJumpTime) ease-in-out 0.075s;
 }
 .right-front-leg {
-  animation: rot-right-leg-front 0.6s ease-in-out 0.075s;
+  animation: rot-right-leg-front var(--lionJumpTime) ease-in-out 0.075s;
 }
 .left-back-leg {
-  animation: rot-left-leg-back 0.6s ease-in-out 0.075s;
+  animation: rot-left-leg-back var(--lionJumpTime) ease-in-out 0.075s;
 }
 .right-back-leg {
-  animation: rot-right-leg-back 0.6s ease-in-out 0.075s;
+  animation: rot-right-leg-back var(--lionJumpTime) ease-in-out 0.075s;
 }
 
 @keyframes rot-left-leg-front {
