@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import Cube from './Cube';
 import LionLeg from './LionLeg';
 
@@ -6,9 +6,12 @@ interface ILion {
   width: number;
   height: number;
   length: number;
+  steps?: number;
 }
 
-const Lion: FC<ILion> = ({ height, length, width }) => {
+const Lion: FC<ILion> = ({ height, length, width, steps }) => {
+  const lionRef = useRef<HTMLDivElement>(null);
+
   const maneWidth = width + 10;
   const maneLength = (length * 3) / 4;
   const maneHeight = (height * 3) / 4;
@@ -30,14 +33,62 @@ const Lion: FC<ILion> = ({ height, length, width }) => {
   const legWidth = width * 0.25;
   const legLength = width * 0.25;
 
+  useEffect(() => {
+    const rr: any = document.querySelector(':root');
+    const lionPos = getComputedStyle(rr!)
+      .getPropertyValue('--lionPosY')
+      .match(/\d/g)
+      ?.join('');
+    const diff = (steps ?? 0) - +(lionPos ?? 0);
+    if (
+      lionRef.current &&
+      !lionRef.current.classList.contains('lion-animate-class') &&
+      diff > 0
+    ) {
+      const leftFrontLeg = document.getElementById('left-front-leg');
+      const rightFrontLeg = document.getElementById('right-front-leg');
+      const leftBackLeg = document.getElementById('left-back-leg');
+      const rightBackLeg = document.getElementById('right-back-leg');
+      rr.style.setProperty('--lionStepSize', `${diff}px`);
+      lionRef.current.classList.add('lion-animate-class');
+      leftFrontLeg?.classList.add('left-front-leg');
+      rightFrontLeg?.classList.add('right-front-leg');
+      leftBackLeg?.classList.add('left-back-leg');
+      rightBackLeg?.classList.add('right-back-leg');
+    }
+  }, [steps, lionRef]);
+
   return (
     <div
       id='lion'
-      style={
-        {
-          // animation: 'animate-lion 0.6s ease-in-out infinite',
-        }
-      }
+      ref={lionRef}
+      onAnimationEnd={() => {
+        lionRef.current!.classList.remove('lion-animate-class');
+        const rr: any = document.querySelector(':root');
+        const lionPos = getComputedStyle(rr!)
+          .getPropertyValue('--lionPosY')
+          .match(/\d/g)
+          ?.join('');
+        const lionStepSize = getComputedStyle(rr!)
+          .getPropertyValue('--lionStepSize')
+          .match(/\d/g)
+          ?.join('');
+
+        const newPos = +(lionPos ?? 0) + +(lionStepSize ?? 0);
+
+        const leftFrontLeg = document.getElementById('left-front-leg');
+        const rightFrontLeg = document.getElementById('right-front-leg');
+        const leftBackLeg = document.getElementById('left-back-leg');
+        const rightBackLeg = document.getElementById('right-back-leg');
+
+        rr.style.setProperty('--lionPosY', `${newPos}px`);
+        rr.style.setProperty('--lionStepSize', `0px`);
+
+        leftFrontLeg?.classList.remove('left-front-leg');
+        rightFrontLeg?.classList.remove('right-front-leg');
+        leftBackLeg?.classList.remove('left-back-leg');
+        rightBackLeg?.classList.remove('right-back-leg');
+      }}
     >
       <div
         style={{
@@ -60,15 +111,16 @@ const Lion: FC<ILion> = ({ height, length, width }) => {
               ),
               linear-gradient(
                 to bottom,
-                #c8834f 56px, 
-                transparent 56px ${height}px
+                #c8834f ${height - 20}px,
+                transparent ${height - 20}px ${height}px
               ),
               linear-gradient(
                 to right,
-                transparent 20px,
-                #e4ddb7 20px 76px,
-                transparent 76px ${width}px
-              )`,
+                transparent ${legWidth}px,
+                #e4ddb7 ${legWidth}px ${width - legWidth}px,
+                transparent ${width - legWidth}px ${width}px
+              )
+              `,
           }}
           frontStyle={{
             backgroundColor: '#83432f',
@@ -274,51 +326,55 @@ const Lion: FC<ILion> = ({ height, length, width }) => {
       </div>
       <div className='legs face'>
         <LionLeg
+          id='left-front-leg'
           legNum={1}
-          wrapperClassName='leg-left-front face'
-          width={legWidth}
-          height={legHeight}
-          length={legLength}
-          style={{
-            transformOrigin: '0 0',
-            transform: `translateX(-${width / 2 - legWidth / 2}px) translateY(${
-              length / 2 - legLength / 2 - 1
-            }px)`,
-            // animation: `rot-left-leg-back 0.3s ease-in-out 0.075s infinite alternate`,
-          }}
-          wrapperStyle={{}}
-        />
-        <LionLeg
-          legNum={2}
-          width={legWidth}
-          height={legHeight}
-          length={legLength}
-          style={{
-            transform: `translateX(${width / 2 - legWidth / 2}px) translateY(${
-              length / 2 - legLength / 2 - 1
-            }px)`,
-          }}
-        />
-        <LionLeg
-          legNum={3}
           width={legWidth}
           height={legHeight}
           length={legLength}
           style={{
             transform: `translateX(-${
-              width / 2 - legWidth / 2
-            }px) translateY(-${length / 2 - legLength / 2}px)`,
+              width / 2 - legWidth / 2 + 1
+            }px) translateY(-${length / 2 - legLength / 2 - 1}px)`,
           }}
         />
         <LionLeg
-          legNum={4}
+          id='right-front-leg'
+          legNum={2}
           width={legWidth}
           height={legHeight}
           length={legLength}
           style={{
             transform: `translateX(${width / 2 - legWidth / 2}px) translateY(-${
-              length / 2 - legLength / 2
+              length / 2 - legLength / 2 - 1
             }px)`,
+            // animation: `rot-right-leg-front 0.3s 0.05s ease-in-out infinite alternate`,
+          }}
+        />
+        <LionLeg
+          id='left-back-leg'
+          legNum={3}
+          width={legWidth}
+          height={legHeight}
+          length={legLength}
+          style={{
+            transform: `translateX(${width / 2 - legWidth / 2}px) translateY(${
+              length / 2 - legLength / 2 + 1
+            }px)`,
+            // animation: `rot-left-leg-back 0.3s ease-in-out 0.075s infinite alternate`,
+          }}
+        />
+        <LionLeg
+          id='right-back-leg'
+          legNum={4}
+          wrapperClassName='leg-left-front face'
+          width={legWidth}
+          height={legHeight}
+          length={legLength}
+          style={{
+            transform: `translateX(-${
+              width / 2 - legWidth / 2 + 1
+            }px) translateY(${length / 2 - legLength / 2 + 1}px)`,
+            // animation: `rot-right-leg-back 0.3s ease-in-out 0.125s infinite alternate`,
           }}
         />
       </div>

@@ -3,9 +3,10 @@ import Ground from './components/Ground';
 import Lion from './components/Lion';
 
 function App() {
-  const [xAngle, setXAngle] = useState(70);
+  const [xAngle, setXAngle] = useState(60);
   const [yAngle, setYAngle] = useState(0);
-  const [zAngle, setZAngle] = useState(52);
+  const [zAngle, setZAngle] = useState(50);
+  const [steps, setSteps] = useState(0);
 
   useEffect(() => {
     const ground = document.getElementById('scene');
@@ -15,6 +16,19 @@ function App() {
       }deg) rotateZ(${zAngle ?? 0}deg)`;
     }
   }, [xAngle, yAngle, zAngle]);
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.key === 'ArrowUp') {
+        setSteps((p) => p + 10);
+      }
+    }
+    window.addEventListener('keydown', handler);
+
+    return () => {
+      window.removeEventListener('keydown', handler);
+    };
+  }, []);
 
   return (
     <>
@@ -59,7 +73,7 @@ function App() {
         className='relative border border-green-500 w-full h-full'
       >
         <Ground />
-        <Lion height={120} width={90} length={128} />
+        <Lion height={120} width={90} length={128} steps={steps} />
       </div>
     </>
   );

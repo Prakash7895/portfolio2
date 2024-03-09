@@ -10,6 +10,9 @@
 
 :root {
   --depth: 1000px;
+
+  --lionPosY: 0px;
+  --lionStepSize: 10px;
 }
 
 #root {
@@ -47,6 +50,7 @@
       #a0a0a0 0 90deg
     );
   background-size: 100% 100%, 4em 4em;
+  /* animation: floorMove 2s infinite linear; */
 }
 
 #lion,
@@ -56,36 +60,89 @@
   align-items: center;
 }
 
+.lion-animate-class {
+  animation: animate-lion 0.6s ease-in-out;
+  animation-fill-mode: both;
+}
+
+#lion {
+  transform: translateY(var(--lionPosY)) translateZ(0px) rotateX(0deg);
+}
+
 @keyframes animate-lion {
-  0%,
-  100% {
-    transform: translate3d(0, -4vmin, 0vmin);
+  0% {
+    transform: translateY(var(--lionPosY)) translateZ(0px) rotateX(0deg);
   }
   33% {
-    transform: translate3d(0, -8vmin, 0vmin) rotateZ(10deg) rotateX(-5deg);
+    transform: translateY(calc(var(--lionPosY) + (var(--lionStepSize) / 3)))
+      translateZ(10px) rotateX(10deg);
   }
   66% {
-    transform: translate3d(0, -7vmin, 0vmin) rotateZ(-10deg) rotateX(5deg);
+    transform: translateY(
+        calc(var(--lionPosY) + ((var(--lionStepSize) * 2) / 3))
+      )
+      translateZ(7px) rotateX(-10deg);
+  }
+  100% {
+    transform: translateY(calc(var(--lionPosY) + var(--lionStepSize)))
+      translateZ(0px) rotateX(0deg);
   }
 }
 
-@keyframes rot-left-leg-back {
-  to {
-    transform: rotateX(-90deg);
-  }
+.left-front-leg {
+  animation: rot-left-leg-front 0.6s ease-in-out 0.075s;
 }
-@keyframes rot-right-leg-back {
-  to {
-    transform: translate3d(11vmin, 0vmin, -7.5vmin) rotateZ(-90deg);
-  }
+.right-front-leg {
+  animation: rot-right-leg-front 0.6s ease-in-out 0.075s;
 }
+.left-back-leg {
+  animation: rot-left-leg-back 0.6s ease-in-out 0.075s;
+}
+.right-back-leg {
+  animation: rot-right-leg-back 0.6s ease-in-out 0.075s;
+}
+
 @keyframes rot-left-leg-front {
-  to {
-    transform: translate3d(0vmin, 0vmin, 7.5vmin) rotateZ(90deg);
+  0%,
+  100% {
+    transform: translateZ(49px) rotateX(180deg) translateX(-34.75px)
+      translateY(-51.75px) rotateX(0deg);
+  }
+  50% {
+    transform: translateZ(49px) rotateX(180deg) translateX(-34.75px)
+      translateY(-51.75px) rotateX(60deg);
   }
 }
 @keyframes rot-right-leg-front {
-  to {
-    transform: translate3d(0vmin, 0vmin, -7.5vmin) rotateZ(90deg);
+  0%,
+  100% {
+    transform: translateZ(49px) rotateX(180deg) translateX(33.75px)
+      translateY(-51.75px) rotateX(0deg);
+  }
+  50% {
+    transform: translateZ(49px) rotateX(180deg) translateX(33.75px)
+      translateY(-51.75px) rotateX(60deg);
+  }
+}
+@keyframes rot-left-leg-back {
+  0%,
+  100% {
+    transform: translateZ(49px) rotateX(180deg) translateX(33.75px)
+      translateY(53.75px) rotateX(0deg);
+  }
+  50% {
+    transform: translateZ(49px) rotateX(180deg) translateX(33.75px)
+      translateY(53.75px) rotateX(-30deg);
+  }
+}
+@keyframes rot-right-leg-back {
+  0%,
+  100% {
+    transform: translateZ(49px) rotateX(180deg) translateX(-34.75px)
+      translateY(53.75px) rotateX(0deg);
+  }
+  50% {
+    transform: translateZ(49px) rotateX(180deg) translateX(-34.75px)
+      translateY(53.75px) rotateX(-30deg);
   }
 }
