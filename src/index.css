@@ -28,11 +28,14 @@
   overflow: hidden;
   perspective: var(--depth);
   perspective-origin: 50% 30%;
-  border: 1px solid blue;
 }
 
 #root * {
   transform-style: preserve-3d;
+}
+
+label {
+  transform: translateZ(10px);
 }
 
 #root #scene * {
@@ -46,12 +49,12 @@
 
 .ground-floor {
   box-shadow: 1em -1em 5em #000 inset;
-  background-image: radial-gradient(circle, transparent, #000 100em),
+  background-image: radial-gradient(circle, transparent, #000 500em),
     repeating-conic-gradient(
-      #686868 0 15deg,
-      #707070 0 30deg,
+      /* #686868 0 15deg, */
+      #909090 0 30deg,
       #808080 0 60deg,
-      #909090 0 75deg,
+      /* #707070 0 75deg, */
       #a0a0a0 0 90deg
     );
   background-size: 100% 100%, 4em 4em;
