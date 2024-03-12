@@ -1,8 +1,18 @@
+import { FC } from 'react';
 import Cube from './Cube';
 
-const Bar = () => {
+interface IBar {
+  x: number;
+  y: number;
+}
+
+const Bar: FC<IBar> = ({ x = 0, y = 0 }) => {
   return (
-    <div>
+    <div
+      style={{
+        transform: `translate(${x - 25}px, ${y - 10}px)`,
+      }}
+    >
       <Cube
         // opacity={0.7}
         width='50px'
@@ -24,6 +34,9 @@ const Bar = () => {
         }}
         rightStyle={{
           backgroundImage: 'linear-gradient(to left, #999, #ccc)',
+        }}
+        bottomStyle={{
+          boxShadow: '#555 0px 0px 15px 20px',
         }}
       />
       <Cube

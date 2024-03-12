@@ -49,7 +49,7 @@ label {
 
 .ground-floor {
   box-shadow: 1em -1em 5em #000 inset;
-  background-image: radial-gradient(circle, transparent, #000 500em),
+  background-image: radial-gradient(circle, transparent, #000 2700px),
     repeating-conic-gradient(
       /* #686868 0 15deg, */
       #909090 0 30deg,

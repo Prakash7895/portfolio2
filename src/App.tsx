@@ -43,13 +43,13 @@ function App() {
       <AxisControl />
       <div id='scene' className='relative w-full h-full'>
         <Ground />
-        <Lion
+        {/* <Lion
           height={100}
           width={90}
           length={110}
           steps={steps}
           setSteps={setSteps}
-        />
+        /> */}
       </div>
     </>
   );

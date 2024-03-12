@@ -1,14 +1,16 @@
 import Axis from './Axis';
 import Boundary from './Boundary';
+import Experiences from './Experiences';
 
 const Ground = () => {
   return (
     <div
       id='ground-floor'
-      className='ground-floor w-[1000%] h-[1000%] flex justify-center items-center'
+      className='ground-floor w-[4000px] h-[4000px] flex justify-center items-center'
     >
       <Axis />
-      <Boundary />
+      {/* <Boundary /> */}
+      <Experiences />
       {/* <Cube
         opacity={0.7}
         borderColor='#fff'

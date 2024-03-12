@@ -50,9 +50,9 @@ const Cube: FC<ICube> = ({
         <div
           className='left-0 border'
           style={{
-            ...leftStyle,
             width: height,
             height: length,
+            ...leftStyle,
             transformOrigin: 'left top',
             transform: `rotateY(-90deg) ${leftStyle.transform ?? ''}`,
             backgroundColor: bgColor,
@@ -64,9 +64,9 @@ const Cube: FC<ICube> = ({
         <div
           className='right-0 border'
           style={{
-            ...rightStyle,
             width: height,
             height: length,
+            ...rightStyle,
             transformOrigin: 'right top',
             transform: `rotateY(90deg) ${rightStyle.transform ?? ''}`,
             backgroundColor: bgColor,
@@ -105,10 +105,10 @@ const Cube: FC<ICube> = ({
           style={{
             backgroundColor: bgColor,
             borderColor: borderColor,
-            ...frontStyle,
             width: width,
             height: height,
-            transformOrigin: 'left bottom',
+            ...frontStyle,
+            transformOrigin: frontStyle.transformOrigin ?? 'left bottom',
             transform: `rotateX(-90deg) ${frontStyle.transform ?? ''}`,
             opacity: opacity,
           }}
@@ -117,10 +117,10 @@ const Cube: FC<ICube> = ({
         <div
           className='top-0 border'
           style={{
-            ...backStyle,
             width: width,
             height: height,
-            transformOrigin: 'right top',
+            ...backStyle,
+            transformOrigin: backStyle.transformOrigin ?? 'right top',
             transform: `rotateX(90deg) rotateZ(180deg) translateY(-${height}) translateX(${width}) ${
               backStyle.transform ?? ''
             }`,
