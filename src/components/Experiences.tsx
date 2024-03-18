@@ -3,8 +3,8 @@ import Cube from './Cube';
 import Triangle from './Triangle';
 
 const Experiences = () => {
-  const height = 100;
-  const width = 30;
+  const height = 200;
+  const width = 60;
   const length = 200;
 
   const triangleWidth = 2 * width;

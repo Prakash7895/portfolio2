@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 const AxisControl = () => {
   const [xAngle, setXAngle] = useState(80);
   const [yAngle, setYAngle] = useState(0);
-  const [zAngle, setZAngle] = useState(30);
-  const [xAxis, setXAxis] = useState(-1000);
-  const [yAxis, setYAxis] = useState(-1000);
+  const [zAngle, setZAngle] = useState(0);
+  const [xAxis, setXAxis] = useState(0);
+  const [yAxis, setYAxis] = useState(-500);
   const [zAxis, setZAxis] = useState(-400);
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const AxisControl = () => {
         <input
           id='range'
           type='range'
-          min='-1000'
+          min='-5000'
           max='1000'
           defaultValue={yAxis}
           className='w-full'
