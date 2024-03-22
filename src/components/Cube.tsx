@@ -48,7 +48,7 @@ const Cube: FC<ICube> = ({
       <div className='container w-full h-full relative flex justify-center items-center'>
         {/* left wall */}
         <div
-          className='left-0 border'
+          className='left-0 border left-wall'
           style={{
             width: height,
             height: length,
@@ -59,10 +59,12 @@ const Cube: FC<ICube> = ({
             borderColor: borderColor,
             opacity: opacity,
           }}
-        ></div>
+        >
+          left
+        </div>
         {/* right wall */}
         <div
-          className='right-0 border'
+          className='right-0 border right-wall'
           style={{
             width: height,
             height: length,
@@ -73,10 +75,12 @@ const Cube: FC<ICube> = ({
             borderColor: borderColor,
             opacity: opacity,
           }}
-        ></div>
+        >
+          right
+        </div>
         {/* top wall */}
         <div
-          className='border'
+          className='border top-wall'
           style={{
             width: width,
             height: length,
@@ -86,10 +90,12 @@ const Cube: FC<ICube> = ({
             borderColor: borderColor,
             opacity: opacity,
           }}
-        ></div>
+        >
+          top
+        </div>
         {/* bottom wall */}
         <div
-          className='border'
+          className='border bottom-wall'
           style={{
             width: width,
             height: length,
@@ -98,10 +104,12 @@ const Cube: FC<ICube> = ({
             opacity: opacity,
             ...bottomStyle,
           }}
-        ></div>
+        >
+          bottom
+        </div>
         {/* front wall */}
         <div
-          className='bottom-0 border'
+          className='bottom-0 border front-wall'
           style={{
             backgroundColor: bgColor,
             borderColor: borderColor,
@@ -112,10 +120,12 @@ const Cube: FC<ICube> = ({
             transform: `rotateX(-90deg) ${frontStyle.transform ?? ''}`,
             opacity: opacity,
           }}
-        ></div>
+        >
+          front
+        </div>
         {/* back wall */}
         <div
-          className='top-0 border'
+          className='top-0 border back-wall'
           style={{
             width: width,
             height: height,
@@ -128,7 +138,9 @@ const Cube: FC<ICube> = ({
             borderColor: borderColor,
             opacity: opacity,
           }}
-        ></div>
+        >
+          back
+        </div>
       </div>
     </div>
   );
