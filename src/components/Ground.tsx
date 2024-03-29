@@ -1,6 +1,4 @@
 import Axis from './Axis';
-import Boundary from './Boundary';
-import Experiences from './Experiences';
 import Projects from './Projects';
 
 const Ground = () => {
