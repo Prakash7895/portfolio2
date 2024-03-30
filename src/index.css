@@ -175,3 +175,18 @@ label {
       translateY(53.75px) rotateX(-30deg);
   }
 }
+
+@keyframes rotate-project-box {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes move-up-box {
+  to {
+    transform: rotateZ(360deg);
+  }
+}
