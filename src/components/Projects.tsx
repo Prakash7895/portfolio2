@@ -205,7 +205,6 @@ const Projects = () => {
           }}
         />
       </div>
-      <Cube borderColor='#fff' opacity={0.7} />
     </div>
   );
 };
