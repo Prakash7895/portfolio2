@@ -111,57 +111,49 @@ const Projects = () => {
     };
   };
 
+  const parentCubeStartPoint =
+    'translateZ(130px) rotateX(35deg) rotateY(315deg)';
+
+  const moveUpDuration = 0.5; //in seconds
+
   const animateCube = (reverse = false, callback?: Function) => {
     if (ref.current) {
-      if (reverse) {
-        if (callback) {
-          const parentCube = ref.current?.getElementsByClassName(
-            'parent-cube'
-          )[0] as HTMLDivElement;
-
-          const pAnimste = parentCube.animate(
-            [
-              {
-                transform:
-                  'translateZ(130px) rotateX(0deg) rotateY(360deg) translateZ(350px)',
-              },
-              { transform: 'translateZ(130px) rotateX(35deg) rotateY(315deg)' },
-            ],
-            {
-              duration: 500,
-              fill: 'forwards',
-              easing: 'ease-in',
-            }
-          );
-
-          pAnimste.onfinish = () => {
-            callback();
-          };
-        }
-        return;
-      }
-
       const parentCube = ref.current?.getElementsByClassName(
         'parent-cube'
       )[0] as HTMLDivElement;
 
+      const endPoint =
+        'translateZ(130px) rotateX(0deg) rotateY(360deg) translateZ(350px)';
+
       const pAnimste = parentCube.animate(
-        [
-          { transform: 'translateZ(130px) rotateX(35deg) rotateY(315deg)' },
-          {
-            transform:
-              'translateZ(130px) rotateX(0deg) rotateY(360deg) translateZ(350px)',
-          },
-        ],
+        reverse
+          ? [
+              {
+                transform: endPoint,
+              },
+              { transform: parentCubeStartPoint },
+            ]
+          : [
+              { transform: parentCubeStartPoint },
+              {
+                transform: endPoint,
+              },
+            ],
         {
-          duration: 500,
+          duration: moveUpDuration * 1000,
           fill: 'forwards',
           easing: 'ease-in',
         }
       );
 
       pAnimste.onfinish = () => {
-        animateSides();
+        if (reverse) {
+          if (callback) {
+            callback();
+          }
+        } else {
+          animateSides();
+        }
       };
     }
   };
@@ -177,9 +169,11 @@ const Projects = () => {
         style={{
           animationName:
             animationType === 'rotate' ? 'rotate-project-box' : 'move-up-box',
-          animationDuration: animationType === 'rotate' ? '3s' : '0.5s',
+          animationDuration:
+            animationType === 'rotate' ? '3s' : `${moveUpDuration}s`,
           animationIterationCount: animationType === 'rotate' ? 'infinite' : 1,
-          animationTimingFunction: 'linear',
+          animationTimingFunction:
+            animationType === 'rotate' ? 'linear' : 'ease-out',
           animationPlayState:
             animationType === 'rotate' ? playState : 'running',
         }}
@@ -207,7 +201,7 @@ const Projects = () => {
           className='parent-cube'
           style={{
             transformOrigin: '0% 0%',
-            transform: 'translateZ(130px) rotateX(35deg) rotateY(315deg)',
+            transform: parentCubeStartPoint,
           }}
         />
       </div>

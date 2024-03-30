@@ -59,9 +59,7 @@ const Cube: FC<ICube> = ({
             borderColor: borderColor,
             opacity: opacity,
           }}
-        >
-          left
-        </div>
+        ></div>
         {/* right wall */}
         <div
           className='right-0 border right-wall'
@@ -75,9 +73,7 @@ const Cube: FC<ICube> = ({
             borderColor: borderColor,
             opacity: opacity,
           }}
-        >
-          right
-        </div>
+        ></div>
         {/* top wall */}
         <div
           className='border top-wall'
@@ -90,9 +86,7 @@ const Cube: FC<ICube> = ({
             borderColor: borderColor,
             opacity: opacity,
           }}
-        >
-          top
-        </div>
+        ></div>
         {/* bottom wall */}
         <div
           className='border bottom-wall'
@@ -104,9 +98,7 @@ const Cube: FC<ICube> = ({
             opacity: opacity,
             ...bottomStyle,
           }}
-        >
-          bottom
-        </div>
+        ></div>
         {/* front wall */}
         <div
           className='bottom-0 border front-wall'
@@ -120,9 +112,7 @@ const Cube: FC<ICube> = ({
             transform: `rotateX(-90deg) ${frontStyle.transform ?? ''}`,
             opacity: opacity,
           }}
-        >
-          front
-        </div>
+        ></div>
         {/* back wall */}
         <div
           className='top-0 border back-wall'
@@ -138,9 +128,7 @@ const Cube: FC<ICube> = ({
             borderColor: borderColor,
             opacity: opacity,
           }}
-        >
-          back
-        </div>
+        ></div>
       </div>
     </div>
   );
