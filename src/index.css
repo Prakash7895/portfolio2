@@ -190,3 +190,7 @@ label {
     transform: rotateZ(360deg);
   }
 }
+
+.project-content * {
+  position: relative !important;
+}

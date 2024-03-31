@@ -1,210 +1,84 @@
-import { useRef, useState } from 'react';
-import Cube from './Cube';
+import { CSSProperties, ReactNode, useState } from 'react';
+import Project from './Project';
+
+interface ProjectItem {
+  id: number;
+  content: ReactNode;
+  style?: CSSProperties;
+  shadowColor?: string;
+  cubeColor?: string;
+}
 
 const Projects = () => {
-  const side = 150;
+  const [openProjectId, setOpenProjectId] = useState(-1);
+  const projects: ProjectItem[] = [
+    {
+      id: 1,
+      content: (
+        <>
+          <h1>Project 1</h1>
+          <p>This is my first project.</p>
+        </>
+      ),
+      style: {
+        transform: 'translateX(-400px)',
+      },
+      cubeColor: '#f7a',
+      shadowColor: '#f7d',
+    },
+    {
+      id: 2,
+      content: (
+        <>
+          <h1>Project 2</h1>
+          <p>This is my second project.</p>
+        </>
+      ),
+      cubeColor: '#a7a',
+      shadowColor: '#a7d',
+    },
+    {
+      id: 3,
+      content: (
+        <>
+          <h1>Project 3</h1>
+          <p>This is my third project.</p>
+        </>
+      ),
+      style: {
+        transform: 'translateX(400px)',
+      },
+      cubeColor: '#17a',
+      shadowColor: '#17d',
+    },
+    {
+      id: 4,
+      content: (
+        <>
+          <h1>Project 4</h1>
+          <p>This is my forth project.</p>
+        </>
+      ),
+      style: {
+        transform: 'translateX(800px)',
+      },
+      cubeColor: '#67a',
+      shadowColor: '#67d',
+    },
+  ];
 
-  const ref = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [playState, setPlayState] = useState<AnimationPlayState>('running');
-  const [animationType, setAnimationType] = useState<'rotate' | 'move-up'>(
-    'rotate'
-  );
-
-  const animateSides = (reverse = false, callback?: Function) => {
-    const leftWall = ref.current?.getElementsByClassName(
-      'left-wall'
-    )[0] as HTMLDivElement;
-    const rightWall = ref.current?.getElementsByClassName(
-      'right-wall'
-    )[0] as HTMLDivElement;
-    const topWall = ref.current?.getElementsByClassName(
-      'top-wall'
-    )[0] as HTMLDivElement;
-    const bottomWall = ref.current?.getElementsByClassName(
-      'bottom-wall'
-    )[0] as HTMLDivElement;
-    const frontWall = ref.current?.getElementsByClassName(
-      'front-wall'
-    )[0] as HTMLDivElement;
-
-    const time = 500;
-
-    const options: any = {
-      duration: time,
-      fill: 'forwards',
-      easing: 'ease-in',
-    };
-
-    const startPointLeftWall = { transform: 'rotateY(-90deg)' };
-    const endPointLeftWall = {
-      transform:
-        'rotateY(-90deg) translate(0px, 0px) rotateX(90deg) rotateY(0deg) rotateZ(0deg)',
-    };
-    leftWall.animate(
-      reverse
-        ? [endPointLeftWall, startPointLeftWall]
-        : [startPointLeftWall, endPointLeftWall],
-      options
-    );
-
-    const startPointRightWall = { transform: 'rotateY(90deg)' };
-    const endPointRightWall = {
-      transform: `rotateY(90deg) rotateX(90deg) translate(${side}px, -${
-        2 * side
-      }px)`,
-    };
-    rightWall.animate(
-      reverse
-        ? [endPointRightWall, startPointRightWall]
-        : [startPointRightWall, endPointRightWall],
-      options
-    );
-
-    const startPointTopWall = { transform: 'translateZ(150px)' };
-    const endPointTopWall = {
-      transformOrigin: '0% 0%',
-      transform:
-        'translateZ(150px) translate(0px, 0px) rotateX(90deg) rotateY(0deg) rotateZ(0deg)',
-    };
-    topWall.animate(
-      reverse
-        ? [endPointTopWall, startPointTopWall]
-        : [startPointTopWall, endPointTopWall],
-      options
-    );
-
-    const startPointBottomWall = { transform: 'translate(0px, 0px)' };
-    const endPointBottomWall = {
-      transform: `translate(0px, 0px) rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateY(${
-        side / 2
-      }px) translateZ(-${side / 2}px)`,
-    };
-    bottomWall.animate(
-      reverse
-        ? [endPointBottomWall, startPointBottomWall]
-        : [startPointBottomWall, endPointBottomWall],
-      options
-    );
-
-    const startPointFrontWall = {
-      transform: 'rotateX(-90deg)',
-    };
-    const endPointFrontWall = {
-      transform: `rotateX(-90deg) translate(-${side}px, ${
-        -1 * side
-      }px) translateZ(-${side}px)`,
-    };
-    const wallAnim = frontWall.animate(
-      reverse
-        ? [endPointFrontWall, startPointFrontWall]
-        : [startPointFrontWall, endPointFrontWall],
-      options
-    );
-
-    wallAnim.onfinish = () => {
-      if (!reverse) {
-        setIsOpen(true);
-      } else {
-        animateCube(true, callback);
-      }
-    };
-  };
-
-  const parentCubeStartPoint =
-    'translateZ(130px) rotateX(35deg) rotateY(315deg)';
-
-  const moveUpDuration = 0.5; //in seconds
-
-  const animateCube = (reverse = false, callback?: Function) => {
-    if (ref.current) {
-      const parentCube = ref.current?.getElementsByClassName(
-        'parent-cube'
-      )[0] as HTMLDivElement;
-
-      const endPoint =
-        'translateZ(130px) rotateX(0deg) rotateY(360deg) translateZ(350px)';
-
-      const pAnimste = parentCube.animate(
-        reverse
-          ? [
-              {
-                transform: endPoint,
-              },
-              { transform: parentCubeStartPoint },
-            ]
-          : [
-              { transform: parentCubeStartPoint },
-              {
-                transform: endPoint,
-              },
-            ],
-        {
-          duration: moveUpDuration * 1000,
-          fill: 'forwards',
-          easing: 'ease-in',
-        }
-      );
-
-      pAnimste.onfinish = () => {
-        if (reverse) {
-          if (callback) {
-            callback();
-          }
-        } else {
-          animateSides();
-        }
-      };
-    }
-  };
-
-  const reverseAnimateCube = (callback: Function) => {
-    animateSides(true, callback);
-  };
+  console.log('openProjectId', openProjectId);
 
   return (
     <div>
-      <div
-        ref={ref}
-        style={{
-          animationName:
-            animationType === 'rotate' ? 'rotate-project-box' : 'move-up-box',
-          animationDuration:
-            animationType === 'rotate' ? '3s' : `${moveUpDuration}s`,
-          animationIterationCount: animationType === 'rotate' ? 'infinite' : 1,
-          animationTimingFunction:
-            animationType === 'rotate' ? 'linear' : 'ease-out',
-          animationPlayState:
-            animationType === 'rotate' ? playState : 'running',
-        }}
-        onClick={() => {
-          setPlayState('paused');
-          setAnimationType('move-up');
-          if (isOpen) {
-            reverseAnimateCube(() => {
-              setAnimationType('rotate');
-              setPlayState('running');
-              setIsOpen(false);
-            });
-          } else {
-            animateCube();
-          }
-        }}
-      >
-        <Cube
-          bgColor='#f7a'
-          opacity={0.6}
-          borderColor='#fff'
-          width={`${side}px`}
-          height={`${side}px`}
-          length={`${side}px`}
-          className='parent-cube'
-          style={{
-            transformOrigin: '0% 0%',
-            transform: parentCubeStartPoint,
-          }}
+      {projects.map((p, idx) => (
+        <Project
+          key={idx}
+          {...p}
+          openProjectId={openProjectId}
+          onClick={(id) => setOpenProjectId(id)}
         />
-      </div>
+      ))}
     </div>
   );
 };
