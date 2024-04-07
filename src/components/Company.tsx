@@ -24,7 +24,7 @@ const Company: FC<ICompany> = ({
 
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isFullyOpen, setIsFullyOpen] = useState(true);
+  const [isFullyOpen, setIsFullyOpen] = useState(false);
 
   const animateToFinalPos = () => {
     const boxes = document.getElementsByClassName('boxes');
@@ -58,6 +58,8 @@ const Company: FC<ICompany> = ({
           boxAnim.onfinish = () => {
             setIsOpen(true);
             setIsAnimating(false);
+
+            animateCrossIcon();
 
             setTimeout(() => {
               setIsFullyOpen(true);
@@ -127,6 +129,45 @@ const Company: FC<ICompany> = ({
     }
   };
 
+  const animateCrossIcon = (callback?: Function) => {
+    const crossIcon = document.getElementsByClassName('cross-icon');
+
+    const icon1 = crossIcon[0] as HTMLDivElement;
+    const icon2 = crossIcon[1] as HTMLDivElement;
+
+    const keyFrames = [
+      { transform: 'rotateZ(45deg)' },
+      { transform: 'rotateZ(0deg)' },
+    ];
+
+    icon1.animate(!isOpen ? keyFrames.reverse() : keyFrames, {
+      duration: time / 2,
+      fill: 'forwards',
+      easing: 'ease-out',
+    });
+
+    const keyFrames1 = [
+      { transform: 'rotateZ(-45deg)' },
+      { transform: 'rotateZ(0deg)' },
+    ];
+    const iconAnim = icon2.animate(
+      !isOpen ? keyFrames1.reverse() : keyFrames1,
+      {
+        duration: time / 2,
+        fill: 'forwards',
+        easing: 'ease-out',
+      }
+    );
+
+    iconAnim.onfinish = () => {
+      if (callback) {
+        callback();
+      }
+      icon1.style.opacity = !isOpen ? '1' : '0';
+      icon2.style.opacity = !isOpen ? '1' : '0';
+    };
+  };
+
   const startAnimation = () => {
     if (isAnimating) {
       return;
@@ -134,9 +175,9 @@ const Company: FC<ICompany> = ({
     setIsAnimating(true);
     if (isOpen) {
       setIsFullyOpen(false);
-      setTimeout(() => {
+      animateCrossIcon(() => {
         animate();
-      }, 500);
+      });
     } else {
       animate();
     }
@@ -192,6 +233,49 @@ const Company: FC<ICompany> = ({
         }}
       >
         Hello
+      </div>
+      <div
+        style={{
+          width: '40px',
+          height: '40px',
+          transformOrigin: 'top center',
+          transform: `translateZ(${
+            zPos + (verticalCount + 1) * boxHeight
+          }px) rotateX(-90deg) translateZ(22px) translateX(${
+            (horizontalCount / 2) * boxWidth - 20
+          }px)`,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+        onClick={() => {
+          isOpen && startAnimation();
+        }}
+        className={`${isOpen ? 'cursor-pointer' : ''}`}
+      >
+        <div
+          className={`cross-icon`}
+          style={{
+            width: '50px',
+            height: '2px',
+            top: 'calc(50% - 1px)',
+            backgroundColor: '#faddff',
+            opacity: isOpen ? 1 : 0,
+            transitionProperty: 'all',
+            transitionDuration: '0.25s',
+          }}
+        ></div>
+        <div
+          className={`cross-icon`}
+          style={{
+            width: '50px',
+            height: '2px',
+            top: 'calc(50% - 1px)',
+            backgroundColor: '#faddff',
+            opacity: isOpen ? 1 : 0,
+            transitionProperty: 'all',
+            transitionDuration: '0.25s',
+          }}
+        ></div>
       </div>
     </div>
   );
