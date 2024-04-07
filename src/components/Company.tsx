@@ -1,0 +1,200 @@
+import { CSSProperties, FC, useState } from 'react';
+
+interface ICompany {
+  id: string;
+  style?: CSSProperties;
+  bgColor?: string;
+  boxWidth?: number;
+  boxHeight?: number;
+  verticalCount?: number;
+  horizontalCount?: number;
+}
+
+const Company: FC<ICompany> = ({
+  id,
+  style,
+  boxWidth = 40,
+  boxHeight = 40,
+  verticalCount = 12,
+  bgColor = '#f1a421',
+  horizontalCount = 8,
+}) => {
+  const zPos = 300;
+  const time = 500;
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isFullyOpen, setIsFullyOpen] = useState(true);
+
+  const animateToFinalPos = () => {
+    const boxes = document.getElementsByClassName('boxes');
+    for (const el of boxes) {
+      if (el.nodeType === Node.ELEMENT_NODE) {
+        const box = el as HTMLDivElement;
+        const dataset = box.dataset;
+        const i = Number(dataset.i);
+        const j = Number(dataset.j);
+
+        const keyFrames = [
+          { transform: box.style.transform },
+          {
+            transform: `translateZ(${
+              zPos + (verticalCount - i) * boxHeight
+            }px) rotateX(-90deg) translateX(${
+              (j - horizontalCount / 2) * boxWidth
+            }px) rotateX(${Math.random() < 0.5 ? 180 : 0}deg) rotateY(${
+              Math.random() < 0.5 ? 180 : 0
+            }deg) rotateZ(${Math.random() < 0.5 ? 180 : 0}deg)`,
+          },
+        ];
+
+        const boxAnim = box.animate(keyFrames, {
+          duration: time + Math.ceil(Math.random() * time),
+          fill: 'forwards',
+          easing: 'ease-in',
+        });
+
+        if (i === verticalCount - 1 && j === horizontalCount - 1) {
+          boxAnim.onfinish = () => {
+            setIsOpen(true);
+            setIsAnimating(false);
+
+            setTimeout(() => {
+              setIsFullyOpen(true);
+            }, 150);
+          };
+        }
+      }
+    }
+  };
+
+  const animate = () => {
+    const boxes = document.getElementsByClassName('boxes');
+
+    for (const el of boxes) {
+      if (el.nodeType === Node.ELEMENT_NODE) {
+        const box = el as HTMLDivElement;
+        const dataset = box.dataset;
+        const i = Number(dataset.i);
+        const j = Number(dataset.j);
+
+        const keyFrameFromStart = [
+          { transform: 'translateZ(0px) rotateX(0deg) translateX(0px)' },
+          {
+            transform: `translateZ(${
+              (zPos * 2) / 3 +
+              Math.ceil(Math.random() * (boxHeight * verticalCount))
+            }px) rotateX(-90deg) translateX(${
+              Math.ceil(
+                Math.random() * boxWidth * ((horizontalCount * 2) / 3)
+              ) * (Math.random() < 0.5 ? -1 : 1)
+            }px) translateZ(${
+              Math.ceil(Math.random() * boxHeight * ((verticalCount * 2) / 3)) *
+              (Math.random() < 0.5 ? -1 : 1)
+            }px) rotateX(${Math.random() < 0.5 ? 180 : 0}deg) rotateY(${
+              Math.random() < 0.5 ? 180 : 0
+            }deg) rotateZ(${Math.random() < 0.5 ? 180 : 0}deg)`,
+          },
+        ];
+
+        const keyFrameFromEnd = [
+          { transform: box.style.transform },
+          { transform: 'translateZ(0px) rotateX(0deg) translateX(0px)' },
+        ];
+
+        const boxAnim = box.animate(
+          isOpen ? keyFrameFromEnd : keyFrameFromStart,
+          {
+            duration: time + Math.ceil(Math.random() * time),
+            fill: 'forwards',
+            easing: isOpen ? 'ease-out' : 'ease',
+          }
+        );
+
+        if (i === verticalCount - 1 && j === horizontalCount - 1) {
+          boxAnim.onfinish = () => {
+            if (isOpen) {
+              setIsOpen(false);
+              setIsAnimating(false);
+            } else {
+              setTimeout(() => {
+                animateToFinalPos();
+              }, 150);
+            }
+          };
+        }
+      }
+    }
+  };
+
+  const startAnimation = () => {
+    if (isAnimating) {
+      return;
+    }
+    setIsAnimating(true);
+    if (isOpen) {
+      setIsFullyOpen(false);
+      setTimeout(() => {
+        animate();
+      }, 500);
+    } else {
+      animate();
+    }
+  };
+
+  return (
+    <div style={style}>
+      <button
+        style={{
+          color: 'red',
+          fontSize: '40px',
+          transform: 'translateZ(200px) rotateX(-90deg)',
+        }}
+        onClick={startAnimation}
+      >
+        Click Me
+      </button>
+      <div id={`company-${id}`} className='border-2 border-blue-600'>
+        {Array.from(Array(verticalCount)).map((_, i) => {
+          return Array.from(Array(horizontalCount)).map((_, j) => (
+            <div
+              className={`boxes box-${i}-${j}`}
+              key={i + j}
+              data-i={i}
+              data-j={j}
+              style={{
+                width: `${boxWidth}px`,
+                height: `${boxHeight}px`,
+                backgroundColor: bgColor,
+                opacity: 0.7,
+                boxShadow: `0px 0px 10px 3px ${bgColor}`,
+                transitionProperty: 'all',
+                transitionDuration: '0.5s',
+              }}
+            ></div>
+          ));
+        })}
+      </div>
+      <div
+        style={{
+          width: `${horizontalCount * boxWidth}px`,
+          height: `${verticalCount * boxHeight}px`,
+          backgroundColor: bgColor,
+          opacity: isFullyOpen ? 1 : 0,
+          transformOrigin: 'top center',
+          transform: `translateZ(${
+            zPos + (verticalCount + 0.5) * boxHeight
+          }px) rotateX(-90deg) translateZ(22px) translateX(-${
+            (horizontalCount / 2) * boxWidth
+          }px)`,
+          transitionProperty: 'all',
+          transitionDuration: '0.5s',
+        }}
+      >
+        Hello
+      </div>
+    </div>
+  );
+};
+
+export default Company;

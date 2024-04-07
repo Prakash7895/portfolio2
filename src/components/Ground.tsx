@@ -1,5 +1,6 @@
 import Axis from './Axis';
 import Boundary from './Boundary';
+import Company from './Company';
 import Experiences from './Experiences';
 import Projects from './Projects';
 
@@ -12,7 +13,8 @@ const Ground = () => {
       <Axis />
       {/* <Boundary /> */}
       {/* <Experiences /> */}
-      <Projects />
+      {/* <Projects /> */}
+      <Company id='codvo' />
 
       {/* <Cube
         opacity={0.7}
