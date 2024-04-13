@@ -185,16 +185,6 @@ const Company: FC<ICompany> = ({
 
   return (
     <div style={style}>
-      <button
-        style={{
-          color: 'red',
-          fontSize: '40px',
-          transform: 'translateZ(200px) rotateX(-90deg)',
-        }}
-        onClick={startAnimation}
-      >
-        Click Me
-      </button>
       <div id={`company-${id}`} className='border-2 border-blue-600'>
         {Array.from(Array(verticalCount)).map((_, i) => {
           return Array.from(Array(horizontalCount)).map((_, j) => (
