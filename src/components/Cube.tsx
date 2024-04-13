@@ -80,11 +80,11 @@ const Cube: FC<ICube> = ({
           style={{
             width: width,
             height: length,
-            ...topStyle,
             transform: `translateZ(${height}) ${topStyle.transform ?? ''}`,
             backgroundColor: bgColor,
             borderColor: borderColor,
             opacity: opacity,
+            ...topStyle,
           }}
         ></div>
         {/* bottom wall */}

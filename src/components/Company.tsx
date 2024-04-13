@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 
 interface ICompany {
   id: string;
@@ -8,6 +8,8 @@ interface ICompany {
   boxHeight?: number;
   verticalCount?: number;
   horizontalCount?: number;
+  animateCounter?: number;
+  onClosed?: () => void;
 }
 
 const Company: FC<ICompany> = ({
@@ -18,6 +20,8 @@ const Company: FC<ICompany> = ({
   verticalCount = 12,
   bgColor = '#f1a421',
   horizontalCount = 8,
+  animateCounter = 0,
+  onClosed,
 }) => {
   const zPos = 300;
   const time = 500;
@@ -118,6 +122,7 @@ const Company: FC<ICompany> = ({
             if (isOpen) {
               setIsOpen(false);
               setIsAnimating(false);
+              onClosed && onClosed();
             } else {
               setTimeout(() => {
                 animateToFinalPos();
@@ -182,6 +187,12 @@ const Company: FC<ICompany> = ({
       animate();
     }
   };
+
+  useEffect(() => {
+    if (animateCounter > 0) {
+      startAnimation();
+    }
+  }, [animateCounter]);
 
   return (
     <div style={style}>
