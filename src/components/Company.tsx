@@ -109,7 +109,7 @@ const Company: FC<ICompany> = ({
         ];
 
         const boxAnim = box.animate(
-          isOpen ? keyFrameFromEnd : keyFrameFromStart,
+          isOpen ? [...keyFrameFromStart].reverse() : keyFrameFromStart,
           {
             duration: time + Math.ceil(Math.random() * time),
             fill: 'forwards',

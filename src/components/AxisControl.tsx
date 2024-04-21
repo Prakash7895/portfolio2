@@ -5,24 +5,46 @@ const AxisControl = () => {
   const [yAngle, setYAngle] = useState(0);
   const [zAngle, setZAngle] = useState(0);
   const [xAxis, setXAxis] = useState(0);
-  const [yAxis, setYAxis] = useState(-500);
-  const [zAxis, setZAxis] = useState(-400);
+  const [yAxis, setYAxis] = useState(-10000);
+  const [zAxis, setZAxis] = useState(-3800);
 
   useEffect(() => {
     const ground = document.getElementById('scene');
     if (ground) {
-      ground.style.transform = `rotateX(${xAngle ?? 20}deg) rotateY(${
+      const currStyle = `rotateX(${xAngle ?? 20}deg) rotateY(${
         yAngle ?? 50
       }deg) rotateZ(${
         zAngle ?? 0
       }deg) translate(${xAxis}px, ${yAxis}px) translateZ(${zAxis}px)`;
+
+      ground.style.transform = currStyle;
+
+      ground.animate(
+        [
+          { transform: `${currStyle} rotateZ(0deg)` },
+          { transform: `${currStyle} rotateZ(360deg)` },
+        ],
+        {
+          duration: 40000,
+          easing: 'linear',
+          fill: 'forwards',
+          iterations: Infinity,
+        }
+      );
     }
+    const root = document.getElementById('root');
+
+    document.body?.addEventListener('scroll', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('SCROLL', e);
+    });
   }, [xAngle, yAngle, zAngle, xAxis, yAxis, zAxis]);
 
   return (
     <>
       <label className='absolute top-0 z-40 w-1/3 text-white'>
-        Y rotate:
+        Y rotate: {yAngle}
         <input
           id='range'
           type='range'
@@ -34,7 +56,7 @@ const AxisControl = () => {
         />
       </label>
       <label className='absolute top-12 z-40 w-1/3 text-white'>
-        X rotate:
+        X rotate: {xAngle}
         <input
           id='range'
           type='range'
@@ -46,7 +68,7 @@ const AxisControl = () => {
         />
       </label>
       <label className='absolute top-24 z-40 w-1/3 text-white'>
-        Z rotate:
+        Z rotate: {zAngle}
         <input
           id='range'
           type='range'
@@ -58,7 +80,7 @@ const AxisControl = () => {
         />
       </label>
       <label className='absolute top-36 z-40 w-1/3 text-white'>
-        X Axis:
+        X Axis: {xAxis}
         <input
           id='range'
           type='range'
@@ -70,11 +92,11 @@ const AxisControl = () => {
         />
       </label>
       <label className='absolute top-48 z-40 w-1/3 text-white'>
-        Y Axis:
+        Y Axis: {yAxis}
         <input
           id='range'
           type='range'
-          min='-5000'
+          min='-20000'
           max='1000'
           defaultValue={yAxis}
           className='w-full'
@@ -82,11 +104,11 @@ const AxisControl = () => {
         />
       </label>
       <label className='absolute top-60 z-40 w-1/3 text-white'>
-        Z Axis:
+        Z Axis: {zAxis}
         <input
           id='range'
           type='range'
-          min='-1000'
+          min='-5000'
           max='1000'
           defaultValue={zAxis}
           className='w-full'

@@ -14,7 +14,8 @@ const Stars = () => {
 
       const zAxis = 1500;
 
-      const zPos = Math.random() * (zAxis - -5 * zAxis) + -5 * zAxis;
+      // const zPos = Math.random() * (zAxis - -5 * zAxis) + -5 * zAxis;
+      const zPos = -1 * (2 * zAxis + Math.random() * 3 * zAxis);
 
       particle.animate(
         [
@@ -45,7 +46,9 @@ const Stars = () => {
     );
   });
 
-  return <div className='absolute w-full h-full -z-[1000] -left-3'>{particles}</div>;
+  return (
+    <div className='absolute w-full h-full -z-[1000] -left-3'>{particles}</div>
+  );
 };
 
 export default Stars;

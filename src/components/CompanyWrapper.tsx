@@ -55,7 +55,7 @@ const CompanyWrapper = () => {
       { transform: topWall.style.transform + ' rotateX(135deg)' },
     ];
 
-    const anim = topWall.animate(isOpen ? [...arr1].reverse() : arr1, {
+    topWall.animate(isOpen ? [...arr1].reverse() : arr1, {
       duration: 500,
       fill: 'forwards',
       easing: 'ease-in',
@@ -70,9 +70,9 @@ const CompanyWrapper = () => {
     if (!isOpen) {
       animateShadow();
     } else {
-      anim.onfinish = () => {
+      setTimeout(() => {
         animateShadow();
-      };
+      }, 300);
     }
   };
   return (
