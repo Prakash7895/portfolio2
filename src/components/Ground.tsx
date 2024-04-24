@@ -11,9 +11,9 @@ const Ground = () => {
       className='ground-floor w-[5000px] h-[5000px] flex justify-center items-center'
     >
       <Axis />
-      {/* <Boundary /> */}
-      {/* <Experiences /> */}
-      {/* <Projects /> */}
+      <Boundary />
+      <Experiences />
+      <Projects />
       <CompanyWrapper />
     </div>
   );

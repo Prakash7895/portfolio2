@@ -20,7 +20,7 @@
   --lionJumpTime: 0.6s;
 }
 
-#root {
+#root-div {
   display: grid;
   place-items: center;
   min-height: 100vh;
@@ -31,7 +31,7 @@
   perspective-origin: 50% 30%;
 }
 
-#root * {
+#root-div * {
   transform-style: preserve-3d;
 }
 
@@ -39,10 +39,10 @@ label {
   transform: translateZ(10px);
 }
 
-#root #scene * {
+#root-div #scene * {
   position: absolute;
 }
-#root #scene {
+#root-div #scene {
   display: flex;
   justify-content: center;
   align-items: center;

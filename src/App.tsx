@@ -3,10 +3,10 @@ import Stars from './components/Stars';
 
 function App() {
   return (
-    <>
+    <div id='root-div' className='w-full h-full fixed'>
       <Stars />
       <Planet />
-    </>
+    </div>
   );
 }
 

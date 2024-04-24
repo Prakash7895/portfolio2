@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+const steps = 25;
+
 const AxisControl = () => {
   const [xAngle, setXAngle] = useState(80);
   const [yAngle, setYAngle] = useState(0);
@@ -7,6 +9,10 @@ const AxisControl = () => {
   const [xAxis, setXAxis] = useState(0);
   const [yAxis, setYAxis] = useState(-10000);
   const [zAxis, setZAxis] = useState(-3800);
+  const [stepData, setStepData] = useState<{
+    yStep: number;
+    zStep: number;
+  } | null>(null);
 
   useEffect(() => {
     const ground = document.getElementById('scene');
@@ -18,28 +24,52 @@ const AxisControl = () => {
       }deg) translate(${xAxis}px, ${yAxis}px) translateZ(${zAxis}px)`;
 
       ground.style.transform = currStyle;
-
-      ground.animate(
-        [
-          { transform: `${currStyle} rotateZ(0deg)` },
-          { transform: `${currStyle} rotateZ(360deg)` },
-        ],
-        {
-          duration: 40000,
-          easing: 'linear',
-          fill: 'forwards',
-          iterations: Infinity,
-        }
-      );
     }
-    const root = document.getElementById('root');
-
-    document.body?.addEventListener('scroll', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('SCROLL', e);
-    });
   }, [xAngle, yAngle, zAngle, xAxis, yAxis, zAxis]);
+
+  const getNextCoordinate = (
+    val: number,
+    step: number,
+    min: number,
+    max: number,
+    add?: boolean
+  ) => {
+    return add
+      ? val >= max
+        ? Math.min(val, max)
+        : val + step
+      : val <= min
+      ? Math.max(val, min)
+      : val - step;
+  };
+
+  useEffect(() => {
+    function handleWheel(e: WheelEvent) {
+      const { deltaY } = e;
+
+      if (stepData) {
+        setYAxis((p) =>
+          getNextCoordinate(p, stepData.yStep, -10000, -1600, deltaY > 0)
+        );
+        setZAxis((p) =>
+          getNextCoordinate(p, stepData.zStep, -3800, -600, deltaY > 0)
+        );
+      } else {
+        const yStep = Math.floor((Math.abs(yAxis) - 1600) / steps);
+        const zStep = Math.floor((Math.abs(zAxis) - 600) / steps);
+
+        setStepData({ yStep, zStep });
+        setYAxis((p) => getNextCoordinate(p, yStep, -10000, -1600, deltaY > 0));
+        setZAxis((p) => getNextCoordinate(p, zStep, -3800, -600, deltaY > 0));
+      }
+    }
+
+    document.addEventListener('wheel', handleWheel);
+
+    return () => {
+      document.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
 
   return (
     <>

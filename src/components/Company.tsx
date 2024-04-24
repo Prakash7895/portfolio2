@@ -103,11 +103,6 @@ const Company: FC<ICompany> = ({
           },
         ];
 
-        const keyFrameFromEnd = [
-          { transform: box.style.transform },
-          { transform: 'translateZ(0px) rotateX(0deg) translateX(0px)' },
-        ];
-
         const boxAnim = box.animate(
           isOpen ? [...keyFrameFromStart].reverse() : keyFrameFromStart,
           {
